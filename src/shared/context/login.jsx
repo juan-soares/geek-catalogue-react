@@ -1,44 +1,13 @@
-import { createContext, useContext, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-const LoginContext = createContext();
+import { createContext, useState } from "react";
+
+export const LoginContext = createContext();
 
 export const LoginContextProvider = ({ children }) => {
-  const [userNickname, setUserNickname] = useState(null);
-  const navigate = useNavigate();
-
-  // call this function when you want to authenticate the userNickname
-  const login = async (credentials) => {
-    const userNickname = await fetch(`${process.env.REACT_APP_API}/users`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials)
-    });
-    setUserNickname(userNickname);
-    navigate("/");
-  };
-
-  // call this function to sign out logged in userNickname
-  const logout = () => {
-    setUserNickname(null);
-    navigate("/", { replace: true });
-  };
-
-  const loginContextValues = useMemo(
-    () => ({
-      userNickname,
-      login,
-      logout
-    }),
-    [userNickname]
-  );
+  const [activeUser, setActiveUser] = useState({ message: "", data: "" });
 
   return (
-    <LoginContext.Provider value={loginContextValues}>
+    <LoginContext.Provider value={{ activeUser, setActiveUser }}>
       {children}
     </LoginContext.Provider>
   );
-};
-
-export const useLogin = () => {
-  return useContext(LoginContext);
 };
