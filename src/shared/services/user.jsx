@@ -5,9 +5,8 @@ export default function useUserServices() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
-
     const searchedUser = await res.json();
-    setSearchedUser(searchedUser);
+    return searchedUser;
   }
 
   return { postUserLogin };
