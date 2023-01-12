@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../shared/context/login";
+import useUserServices from "../../shared/services/user";
 
 import Header from "../../shared/components/Header";
 import Footer from "../../shared/components/Footer";
@@ -10,7 +11,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const { setActiveUser } = useContext(LoginContext);
+  const { activeUser, setActiveUser } = useContext(LoginContext);
 
   const redirect = useNavigate();
 
@@ -24,16 +25,15 @@ export default function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const res = await fetch(`${process.env.REACT_APP_API}/user`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
+    setActiveUser({ ...activeUser, data: null });
 
-    const searchedUser = await res.json();
+    const { postUserLogin } = useUserServices();
+
+    const searchedUser = await postUserLogin(credentials);
 
     if (searchedUser.data === "") {
       window.alert(searchedUser.message);
+      setActiveUser({ ...activeUser, data: "" });
       setCredentials({ email: "", password: "" });
     } else {
       setActiveUser(searchedUser);
@@ -57,7 +57,7 @@ export default function LoginPage() {
           required
         />
         <label htmlFor="password" required>
-          Usuário:{" "}
+          Senha:{" "}
         </label>
         <input
           id="password"
@@ -68,7 +68,10 @@ export default function LoginPage() {
           required
         />
 
-        <button>Log in</button>
+        <button>
+          {activeUser.data === "" && "Log in"}
+          {activeUser.data === null && "Loading"}
+        </button>
       </form>
       <Footer />
     </div>

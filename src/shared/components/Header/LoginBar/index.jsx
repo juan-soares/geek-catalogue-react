@@ -1,18 +1,33 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { LoginContext } from "../../../context/login";
+import { Link } from "react-router-dom";
 
 export default function LoginBar() {
-  const { searchedUser, setSearchedUser } = useContext(LoginContext);
+  const { activeUser, setActiveUser } = useContext(LoginContext);
+
+  function logOut() {
+    const confirm = window.confirm("Deseja realmente sair?");
+
+    if (confirm) {
+      setActiveUser({ message: "", data: "" });
+      window.alert("Log out realizado!");
+    }
+  }
 
   return (
     <div>
-      {searchedUser && <button onClick={() => logout()}>Logout</button>}
-
-      {!searchedUser && (
+      {(activeUser.data === "" || activeUser.data === null) && (
         <Link to="/login">
           <button>Login</button>
         </Link>
+      )}
+      {activeUser.data !== "" && activeUser.data !== null && (
+        <div>
+          <span>{activeUser.data}</span>
+          <Link to="/">
+            <button onClick={logOut}>Logout</button>
+          </Link>
+        </div>
       )}
     </div>
   );
