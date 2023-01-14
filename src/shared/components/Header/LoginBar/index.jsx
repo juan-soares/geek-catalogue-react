@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { LoginContext } from "../../../context/login";
 import { Link } from "react-router-dom";
 
-export default function LoginBar() {
+export default function HeaderLoginBar() {
   const { activeUser, setActiveUser } = useContext(LoginContext);
 
   function logOut() {
