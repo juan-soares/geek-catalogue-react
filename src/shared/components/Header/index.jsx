@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import LoginBar from "./LoginBar";
+import HeaderGlobalSearch from "./GlobalSearch";
+import HeaderLoginBar from "./LoginBar";
 
 export default function Header() {
   return (
@@ -12,7 +13,8 @@ export default function Header() {
           height="50"
         />
       </Link>
-      <LoginBar />
+      <HeaderGlobalSearch />
+      <HeaderLoginBar />
     </header>
   );
 }
