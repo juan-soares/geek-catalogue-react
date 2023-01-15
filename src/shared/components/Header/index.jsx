@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HeaderGlobalSearch from "./GlobalSearch";
 import HeaderLoginBar from "./LoginBar";
+import HeaderNavbar from "./Navbar";
 
 export default function Header() {
   return (
@@ -15,6 +16,7 @@ export default function Header() {
       </Link>
       <HeaderGlobalSearch />
       <HeaderLoginBar />
+      <HeaderNavbar />
     </header>
   );
 }
