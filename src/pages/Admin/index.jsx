@@ -1,34 +1,35 @@
 import { useState } from "react";
 import Header from "../../shared/components/Header";
+import AdminResourcesFeatures from "../../components/AdminResourcesFeatures";
 import Footer from "../../shared/components/Footer";
-import AdminResourceForm from "../../components/AdminResourceForm";
 
 export default function AdminPage() {
   const resources = ["Categorias", "Subcategorias"];
-  const [showForm, setShowForm] = useState(false);
-  const [resourceSelected, setResourceSelected] = useState("");
+  const [selectedResource, setSelectedResource] = useState("");
+  const [showAdminResourcesFeatures, setShowAdminResourcesFeatures] =
+    useState(false);
 
   return (
-    <div>
+    <>
       <Header />
-      <div>
-        Admin Page
-        {resources.map((resource) => {
-          return (
-            <button
-              key={resource}
-              onClick={() => {
-                setShowForm(true);
-                setResourceSelected(resource);
-              }}
-            >
-              Adicionar {resource}
-            </button>
-          );
-        })}
-        {showForm && <AdminResourceForm resourceSelected={resourceSelected} />}
-      </div>
+      <div>Admin Page</div>
+      {resources.map((resource) => {
+        return (
+          <button
+            key={resource}
+            onClick={() => {
+              setSelectedResource(resource);
+              setShowAdminResourcesFeatures(true);
+            }}
+          >
+            {resource}
+          </button>
+        );
+      })}
+      {showAdminResourcesFeatures && (
+        <AdminResourcesFeatures selectedResource={selectedResource} />
+      )}
       <Footer />
-    </div>
+    </>
   );
 }

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function useForm() {
   function handleChange(e, inputValues, setInputValues) {
     setInputValues({ ...inputValues, [e.target.id]: e.target.value });
@@ -21,8 +19,6 @@ export default function useForm() {
     const { message } = await res.json();
 
     window.alert(message);
-
-    console.log(inputValues);
 
     let resetValues = {};
     Object.keys(inputValues).forEach((key) => (resetValues[key] = ""));
