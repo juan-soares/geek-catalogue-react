@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { LoginContext } from "../../context/login";
 import HeaderGlobalSearch from "./GlobalSearch";
 import HeaderLoginBar from "./LoginBar";
 import HeaderNavbar from "./Navbar";
 
 export default function Header() {
+ 
+
   return (
     <header>
       <Link to="/">

@@ -23,7 +23,7 @@ export default function HeaderLoginBar() {
       )}
       {activeUser.data !== "" && activeUser.data !== null && (
         <div>
-          <span>{activeUser.data}</span>
+          <Link to="/admin">{activeUser.data}</Link>
           <Link to="/">
             <button onClick={logOut}>Logout</button>
           </Link>
