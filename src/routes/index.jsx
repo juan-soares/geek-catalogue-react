@@ -8,7 +8,7 @@ const routes = createBrowserRouter([
     path: "/",
     element: (
       <LoginContextProvider>
-        <HomePage />
+         <HomePage />
       </LoginContextProvider>
     )
   },

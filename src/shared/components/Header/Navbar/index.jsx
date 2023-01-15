@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useCategoryServices from "../../../services/category";
+import stringToUrl from "../../../utils/stringToUrl";
 
 export default function HeaderNavbar() {
-  const [categories, setCategories] = useState([
-    { _id: 1, name: "A", subcategories: [{ _id: 2, name: "AAAa" }] },
-    { _id: 2, name: "B", subcategories: [] },
-  ]);
+  const [categories, setCategories] = useState([]);
   const [submenu, setShowSubmenu] = useState(false);
+  const { getCategory } = useCategoryServices();
 
+  useEffect(() => {
+    async function getList() {
+      const list = await getCategory();
+      setCategories(list);
+    }
+    getList();
+  }, []);
 
   return (
     <nav>
@@ -15,21 +22,28 @@ export default function HeaderNavbar() {
         {categories.map((category) => {
           if (category.subcategories.length === 0) {
             return (
-              <li>
-                <Link to={`/${category.name}`}>{category.name}</Link>
+              <li key={category._id}>
+                <Link to={`/${stringToUrl(category.name)}`}>
+                  {category.name}
+                </Link>
               </li>
             );
           } else {
             return (
-              <li onClick={() => setShowSubmenu(!submenu)}>
+              <li key={category._id} onClick={() => setShowSubmenu(!submenu)}>
                 {category.name}
-
                 {submenu && (
                   <ul>
                     {category.subcategories.map((subcategory) => {
                       return (
-                        <li>
-                          <Link>{subcategory.name}</Link>
+                        <li key={subcategory._id}>
+                          <Link
+                            to={`/${stringToUrl(category.name)}/${stringToUrl(
+                              subcategory.name
+                            )}`}
+                          >
+                            {subcategory.name}
+                          </Link>
                         </li>
                       );
                     })}
