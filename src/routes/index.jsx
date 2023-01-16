@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { LoginContextProvider } from "../shared/context/login";
+import DefaultLayoutPage from "../pages/DefaultLayout";
 import HomePage from "../pages/Home";
 import LoginPage from "../pages/Login";
 import AdminPage from "../pages/Admin";
@@ -7,27 +7,12 @@ import AdminPage from "../pages/Admin";
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <LoginContextProvider>
-        <HomePage />
-      </LoginContextProvider>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <LoginContextProvider>
-        <LoginPage />
-      </LoginContextProvider>
-    ),
-  },
-  {
-    path: "/admin",
-    element: (
-      <LoginContextProvider>
-        <AdminPage />
-      </LoginContextProvider>
-    ),
+    element: <DefaultLayoutPage />,
+    children: [
+      { path: "", element: <HomePage /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/admin", element: <AdminPage /> },
+    ],
   },
 ]);
 

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { LoginContext } from "../../../context/login";
+import { LoginContext } from "../../../../utils/context/login";
 import { Link } from "react-router-dom";
 
 export default function HeaderLoginBar() {
@@ -9,26 +9,19 @@ export default function HeaderLoginBar() {
     const confirm = window.confirm("Deseja realmente sair?");
 
     if (confirm) {
-      setActiveUser({ message: "", data: "" });
+      setActiveUser({});
       window.alert("Log out realizado!");
     }
   }
 
   return (
     <div>
-      {(activeUser.data === "" || activeUser.data === null) && (
+      {!activeUser.nickname && (
         <Link to="/login">
           <button>Login</button>
         </Link>
       )}
-      {activeUser.data !== "" && activeUser.data !== null && (
-        <div>
-          <Link to="/admin">{activeUser.data}</Link>
-          <Link to="/">
-            <button onClick={logOut}>Logout</button>
-          </Link>
-        </div>
-      )}
+      {activeUser.nickname && <button>Logout</button>}
     </div>
   );
 }

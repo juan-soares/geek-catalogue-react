@@ -1,13 +1,10 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../../shared/context/login";
-import useUserServices from "../../shared/services/user";
-
-import Header from "../../shared/components/Header";
-import Footer from "../../shared/components/Footer";
+import useForm from "../../utils/hooks/useForm";
+import { LoginContext } from "../../utils/context/login";
 
 export default function LoginPage() {
-  const [credentials, setCredentials] = useState({
+  /* const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
@@ -40,40 +37,56 @@ export default function LoginPage() {
       window.alert(searchedUser.data + " logado com sucesso!");
       redirect("/");
     }
-  }
+  } */
+
+  const [credentials, setCredentials] = useState({});
+  const { handleChange } = useForm();
+  const { activeUser, setActiveUser } = useContext(LoginContext);
+  const redirect = useNavigate();
 
   return (
     <div>
-      <Header />
       Login Page
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setActiveUser({ nickname: "" });
+
+          const res = await fetch(`${process.env.REACT_APP_API}/user`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+          });
+          const { message, data } = await res.json();
+          if (data !== "") {
+            setActiveUser({ nickname: data });
+            redirect("/");
+          } else {
+            setCredentials({});
+            setActiveUser({});
+          }
+          window.alert(message);
+        }}
+      >
         <label htmlFor="email">Usuário: </label>
         <input
-          id="email"
           type="email"
+          id="email"
           placeholder="E-mail"
-          value={credentials.email}
-          onChange={(e) => handleChange(e)}
+          value={credentials.email ? credentials.email : ""}
+          onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
         />
-        <label htmlFor="password" required>
-          Senha:{" "}
-        </label>
+        <label htmlFor="password">Senha: </label>
         <input
-          id="password"
           type="password"
-          placeholder="Senha"
-          value={credentials.password}
-          onChange={(e) => handleChange(e)}
+          id="password"
+          value={credentials.password ? credentials.password : ""}
+          onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
         />
-
-        <button>
-          {activeUser.data === "" && "Log in"}
-          {activeUser.data === null && "Loading"}
-        </button>
+        <button>{activeUser?.nickname === "" ? "Loading" : "OK"}</button>
       </form>
-      <Footer />
     </div>
   );
 }

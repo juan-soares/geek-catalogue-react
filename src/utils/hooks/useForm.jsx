@@ -1,6 +1,11 @@
+import useServices from "./useServices";
+
 export default function useForm() {
+  const { postService } = useServices();
+
   function handleChange(e, inputValues, setInputValues) {
     setInputValues({ ...inputValues, [e.target.id]: e.target.value });
+    console.log(inputValues);
   }
 
   async function handleSubmit(e, inputValues, setInputValues, url) {
@@ -10,19 +15,7 @@ export default function useForm() {
 
     if (!confirm) return null;
 
-    const res = await fetch(`${process.env.REACT_APP_API}/${url}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inputValues),
-    });
-
-    const { message } = await res.json();
-
-    window.alert(message);
-
-    let resetValues = {};
-    Object.keys(inputValues).forEach((key) => (resetValues[key] = ""));
-    setInputValues(resetValues);
+    await postService(inputValues, setInputValues, url);
   }
 
   return { handleChange, handleSubmit };

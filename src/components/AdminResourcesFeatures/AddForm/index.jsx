@@ -1,5 +1,5 @@
 import AddFormCategoryInputs from "./CategoryInputs";
-import useForm from "../../../shared/utils/hooks/useForm";
+import useForm from "../../../utils/hooks/useForm";
 import { useState } from "react";
 
 export default function AdminResourcesFeaturesAddForm({ selectedResource }) {
