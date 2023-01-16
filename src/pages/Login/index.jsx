@@ -4,44 +4,9 @@ import useForm from "../../utils/hooks/useForm";
 import { LoginContext } from "../../utils/context/login";
 
 export default function LoginPage() {
-  /* const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
-  const { activeUser, setActiveUser } = useContext(LoginContext);
-
-  const redirect = useNavigate();
-
-  function handleChange(e) {
-    setCredentials({
-      ...credentials,
-      [e.target.id]: e.target.value,
-    });
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    setActiveUser({ ...activeUser, data: null });
-
-    const { postUserLogin } = useUserServices();
-
-    const searchedUser = await postUserLogin(credentials);
-
-    if (searchedUser.data === "") {
-      window.alert(searchedUser.message);
-      setActiveUser({ ...activeUser, data: "" });
-      setCredentials({ email: "", password: "" });
-    } else {
-      setActiveUser(searchedUser);
-      window.alert(searchedUser.data + " logado com sucesso!");
-      redirect("/");
-    }
-  } */
-
   const [credentials, setCredentials] = useState({});
   const { handleChange } = useForm();
-  const { activeUser, setActiveUser } = useContext(LoginContext);
+  const { activeUser, userLogin } = useContext(LoginContext);
   const redirect = useNavigate();
 
   return (
@@ -49,23 +14,9 @@ export default function LoginPage() {
       Login Page
       <form
         onSubmit={async (e) => {
-          e.preventDefault();
-          setActiveUser({ nickname: "" });
-
-          const res = await fetch(`${process.env.REACT_APP_API}/user`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials),
-          });
-          const { message, data } = await res.json();
-          if (data !== "") {
-            setActiveUser({ nickname: data });
-            redirect("/");
-          } else {
-            setCredentials({});
-            setActiveUser({});
-          }
-          window.alert(message);
+          await userLogin(e, credentials);
+          setCredentials({});
+          if (activeUser !== "") redirect("/");
         }}
       >
         <label htmlFor="email">Usuário: </label>

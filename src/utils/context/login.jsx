@@ -7,16 +7,24 @@ export const LoginContextProvider = ({ children }) => {
   const [activeUser, setActiveUser] = useState({});
   const { handleSubmit } = useForm();
 
-  async function userLogin(e, credentials, setCredentials, url) {
-    await handleSubmit(e, credentials, setActiveUser, url);
+  async function userLogin(e, credentials) {
+    await handleSubmit(e, credentials, setActiveUser, "user");
+  }
 
-    setCredentials({});
+  function userLogout() {
+    const confirm = window.confirm("Deseja sair?");
 
-    console.log(activeUser);
+    if (!confirm) null;
+
+    setActiveUser({});
+
+    window.alert("Logout realizado!");
   }
 
   return (
-    <LoginContext.Provider value={{ activeUser, setActiveUser, userLogin }}>
+    <LoginContext.Provider
+      value={{ activeUser, setActiveUser, userLogin, userLogout }}
+    >
       {children}
     </LoginContext.Provider>
   );
