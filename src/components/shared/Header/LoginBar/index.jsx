@@ -1,18 +1,10 @@
 import { useContext } from "react";
 import { LoginContext } from "../../../../utils/context/login";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HeaderLoginBar() {
-  const { activeUser, setActiveUser } = useContext(LoginContext);
-
-  function logOut() {
-    const confirm = window.confirm("Deseja realmente sair?");
-
-    if (confirm) {
-      setActiveUser({});
-      window.alert("Log out realizado!");
-    }
-  }
+  const { activeUser, userLogout } = useContext(LoginContext);
+  const redirect = useNavigate();
 
   return (
     <div>
@@ -21,7 +13,25 @@ export default function HeaderLoginBar() {
           <button>Login</button>
         </Link>
       )}
-      {activeUser.nickname && <button>Logout</button>}
+      {activeUser.nickname && (
+        <div>
+          <img
+            src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"
+            alt="user icon"
+            width="50"
+            heigth="50"
+          />
+          <span>{activeUser.nickname}</span>
+          <button
+            onClick={() => {
+              userLogout();
+              redirect("/");
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      )}
     </div>
   );
 }

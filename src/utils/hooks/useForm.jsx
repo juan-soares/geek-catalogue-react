@@ -15,7 +15,9 @@ export default function useForm() {
 
     if (!confirm) return null;
 
-    await postService(inputValues, setInputValues, url);
+    const message = await postService(inputValues, setInputValues, url);
+
+    window.alert(message);
   }
 
   return { handleChange, handleSubmit };
