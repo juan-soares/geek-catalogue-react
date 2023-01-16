@@ -1,6 +1,13 @@
 import { RouterProvider } from "react-router-dom";
-import routes from "./routes/index";
+import { LoginContextProvider } from "./utils/context/login";
+import routes from "./routes";
 
 export default function App() {
-  return <RouterProvider router={routes} />;
+  return (
+    <>
+      <LoginContextProvider>
+        <RouterProvider router={routes} />
+      </LoginContextProvider>
+    </>
+  );
 }

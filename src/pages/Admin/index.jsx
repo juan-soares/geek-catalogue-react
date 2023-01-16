@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Header from "../../shared/components/Header";
+
 import AdminResourcesFeatures from "../../components/AdminResourcesFeatures";
-import Footer from "../../shared/components/Footer";
 
 export default function AdminPage() {
   const resources = ["Categorias", "Subcategorias"];
@@ -10,8 +9,7 @@ export default function AdminPage() {
     useState(false);
 
   return (
-    <>
-      <Header />
+    <div>
       <div>Admin Page</div>
       {resources.map((resource) => {
         return (
@@ -29,7 +27,6 @@ export default function AdminPage() {
       {showAdminResourcesFeatures && (
         <AdminResourcesFeatures selectedResource={selectedResource} />
       )}
-      <Footer />
-    </>
+    </div>
   );
 }

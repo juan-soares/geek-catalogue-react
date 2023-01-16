@@ -1,38 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useGlobalSearchServices from "../../../services/globalSearch";
+import useForm from "../../../../utils/hooks/useForm";
 
 export default function HeaderGlobalSearch() {
-  const [searchedValue, setSeachedValue] = useState({ inputValue: "" });
-  const [searchResults, setSearchResults] = useState([]);
-  const { postGlobalSearch } = useGlobalSearchServices();
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    setSeachedValue({ inputValue: "" });
-  }
+  const { handleChange } = useForm();
+  const [searchedValues, setSearchedValues] = useState({});
 
   return (
     <div>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form>
         <input
           type="search"
-          list="searchResults"
+          id="searchedValue"
           placeholder="Busca"
-          value={searchedValue.inputValue}
-          onChange={async (e) => {
-            setSeachedValue({ inputValue: e.target.value });
-            const list = await postGlobalSearch({ inputValue: e.target.value });
-            setSearchResults(list);
+          value={
+            searchedValues.searchedValue ? searchedValues.searchedValue : ""
+          }
+          onChange={(e) => {
+            handleChange(e, searchedValues, setSearchedValues);
           }}
           required
         />
-
         <button>0-</button>
       </form>
 
-      <ul>
-        {searchedValue.inputValue.length > 0 &&
+      {console.log(searchedValues)}
+
+      {/* <ul>
+        {searchedValues.inputValue.length > 0 &&
           searchResults.length > 0 &&
           searchResults.map((result) => (
             <li>
@@ -56,7 +51,7 @@ export default function HeaderGlobalSearch() {
         {searchedValue.inputValue.length > 0 && searchResults.length === 0 && (
           <li>Sem resultados.</li>
         )}
-      </ul>
+      </ul> */}
     </div>
   );
 }

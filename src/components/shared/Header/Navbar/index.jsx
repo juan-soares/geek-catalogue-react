@@ -1,25 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import useCategoryServices from "../../../services/category";
-import stringToUrl from "../../../utils/stringToUrl";
+import useServices from "../../../../utils/hooks/useServices";
+import stringToUrl from "../../../../utils/stringToUrl";
 
 export default function HeaderNavbar() {
-  const [categories, setCategories] = useState([]);
+  const { getService } = useServices();
+  const [list, setList] = useState([]);
   const [submenu, setShowSubmenu] = useState(false);
-  const { getCategory } = useCategoryServices();
 
   useEffect(() => {
-    async function getList() {
-      const list = await getCategory();
-      setCategories(list);
-    }
-    getList();
+    getService(setList, "category");
   }, []);
 
   return (
     <nav>
       <ul>
-        {categories.map((category) => {
+        {list.map((category) => {
           if (category.subcategories.length === 0) {
             return (
               <li key={category._id}>
