@@ -1,32 +1,31 @@
 import { useState } from "react";
-
-import AdminResourcesFeatures from "../../components/AdminResourcesFeatures";
+import ResourceFeatures from "../../components/ResourceFeatures";
 
 export default function AdminPage() {
-  const resources = ["Categorias", "Subcategorias"];
-  const [selectedResource, setSelectedResource] = useState("");
-  const [showAdminResourcesFeatures, setShowAdminResourcesFeatures] =
-    useState(false);
+  const resources = [
+    { title: "Categorias", url: "category" },
+    { title: "Subcategorias", url: "subcategory" },
+  ];
+  const [showResourceFeatures, setShowResourceFeatures] = useState(false);
+  const [selectedResource, setSelectedResource] = useState({});
 
   return (
     <div>
-      <div>Admin Page</div>
+      ADMIN PAGE
       {resources.map((resource) => {
         return (
           <button
-            key={resource}
+            key={resource.url}
             onClick={() => {
+              setShowResourceFeatures(true);
               setSelectedResource(resource);
-              setShowAdminResourcesFeatures(true);
             }}
           >
-            {resource}
+            {resource.title}
           </button>
         );
       })}
-      {showAdminResourcesFeatures && (
-        <AdminResourcesFeatures selectedResource={selectedResource} />
-      )}
+      {showResourceFeatures && <ResourceFeatures resource={selectedResource} />}
     </div>
   );
 }

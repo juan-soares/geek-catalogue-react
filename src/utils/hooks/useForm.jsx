@@ -14,7 +14,6 @@ export default function useForm() {
     const confirm = window.confirm("Deseja salvar?");
 
     if (!confirm) return null;
-
     const message = await postService(inputValues, setInputValues, url);
 
     window.alert(message);

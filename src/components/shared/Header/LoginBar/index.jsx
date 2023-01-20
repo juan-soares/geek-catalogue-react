@@ -21,7 +21,7 @@ export default function HeaderLoginBar() {
             width="50"
             heigth="50"
           />
-          <span>{activeUser.nickname}</span>
+          <Link to="/admin">{activeUser.nickname}</Link>
           <button
             onClick={() => {
               userLogout();
