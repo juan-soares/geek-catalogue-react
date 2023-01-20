@@ -1,12 +1,10 @@
-import { useState } from "react";
 import useForm from "../../../utils/hooks/useForm";
 
-export default function InputsCategory({ isInputDisable, resourceValues }) {
+export default function InputsSubcategory({ isInputDisable, resourceValues }) {
   const { handleChange } = useForm();
   const [inputValues, setInputvalues] = useState({
     name: resourceValues.name,
   });
-
   return (
     <>
       <label>Nome: </label>
