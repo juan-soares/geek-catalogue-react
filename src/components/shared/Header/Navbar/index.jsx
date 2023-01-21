@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import useServices from "../../../../utils/hooks/useServices";
+import useForm from "../../../../utils/hooks/useForm";
 import stringToUrl from "../../../../utils/stringToUrl";
 
 export default function HeaderNavbar() {
-  const { getService } = useServices();
+  const { handleSubmit } = useForm();
   const [list, setList] = useState([]);
   const [submenu, setShowSubmenu] = useState(false);
 
   useEffect(() => {
-    getService(setList, "category");
+    handleSubmit(null, "GET", "category", list, setList);
   }, []);
 
   return (
