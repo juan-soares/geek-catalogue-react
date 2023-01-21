@@ -8,7 +8,7 @@ export const LoginContextProvider = ({ children }) => {
   const { handleSubmit } = useForm();
 
   async function userLogin(e, credentials) {
-    await handleSubmit(e, credentials, setActiveUser, "user");
+    await handleSubmit(e, "POST", "user", credentials, setActiveUser);
   }
 
   function userLogout() {

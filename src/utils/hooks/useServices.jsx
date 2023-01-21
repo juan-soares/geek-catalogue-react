@@ -1,11 +1,11 @@
 export default function useServices() {
-  async function getService(setList, url) {
+  async function getService(url) {
     const res = await fetch(`${process.env.REACT_APP_API}/${url}`);
     const { data } = await res.json();
-    setList(data);
+    return data;
   }
 
-  async function postService(inputValues, setInputValues, url) {
+  async function postService(url, inputValues, setInputValues) {
     if (url === "user") {
       setInputValues({ nickname: "" });
     }
@@ -25,5 +25,15 @@ export default function useServices() {
     return message;
   }
 
-  return { getService, postService };
+  async function deleteService(url, itemToDelete) {
+    const res = await fetch(`${process.env.REACT_APP_API}/${url}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(itemToDelete),
+    });
+    const { message, data } = await res.json();
+    return { message, data };
+  }
+
+  return { getService, postService, deleteService };
 }
