@@ -1,10 +1,10 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useForm from "../../utils/hooks/useForm";
 import { LoginContext } from "../../utils/context/login";
 
 export default function LoginPage() {
-  const [credentials, setCredentials] = useState({});
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
   const { handleChange } = useForm();
   const { activeUser, userLogin } = useContext(LoginContext);
   const redirect = useNavigate();
@@ -15,8 +15,8 @@ export default function LoginPage() {
       <form
         onSubmit={async (e) => {
           await userLogin(e, credentials);
-          setCredentials({});
-          if (activeUser !== "") redirect("/");
+          setCredentials({ email: "", password: "" });
+          redirect("/");
         }}
       >
         <label htmlFor="email">Usuário: </label>
@@ -24,7 +24,7 @@ export default function LoginPage() {
           type="email"
           id="email"
           placeholder="E-mail"
-          value={credentials.email ? credentials.email : ""}
+          value={credentials.email}
           onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
         />
@@ -32,11 +32,11 @@ export default function LoginPage() {
         <input
           type="password"
           id="password"
-          value={credentials.password ? credentials.password : ""}
+          value={credentials.password}
           onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
         />
-        <button>{activeUser?.nickname === "" ? "Loading" : "OK"}</button>
+        <button>{activeUser.nickname === "loading" ? "Loading" : "OK"}</button>
       </form>
     </div>
   );

@@ -8,12 +8,13 @@ export default function HeaderLoginBar() {
 
   return (
     <div>
-      {!activeUser.nickname && (
+      {(activeUser.nickname === "" || activeUser.nickname === "loading") && (
         <Link to="/login">
           <button>Login</button>
         </Link>
       )}
-      {activeUser.nickname && (
+
+      {activeUser.nickname !== "" && activeUser.nickname !== "loading" && (
         <div>
           <img
             src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png"

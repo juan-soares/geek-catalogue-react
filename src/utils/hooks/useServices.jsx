@@ -5,24 +5,24 @@ export default function useServices() {
     return data;
   }
 
-  async function postService(url, inputValues, setInputValues) {
-    if (url === "user") {
-      setInputValues({ nickname: "" });
-    }
-
+  async function postService(url, inputValues) {
     const res = await fetch(`${process.env.REACT_APP_API}/${url}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(inputValues),
     });
     const { message, data } = await res.json();
+    return { message, data };
+  }
 
-    if (url === "user" && data !== "") {
-      setInputValues({ nickname: data });
-    } else {
-      setInputValues({});
-    }
-    return message;
+  async function putService(url, inputValues) {
+    const res = await fetch(`${process.env.REACT_APP_API}/${url}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(inputValues),
+    });
+    const { message, data } = await res.json();
+    return { message, data };
   }
 
   async function deleteService(url, itemToDelete) {
@@ -35,5 +35,5 @@ export default function useServices() {
     return { message, data };
   }
 
-  return { getService, postService, deleteService };
+  return { getService, postService, putService, deleteService };
 }

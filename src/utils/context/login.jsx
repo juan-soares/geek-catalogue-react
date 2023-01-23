@@ -4,10 +4,11 @@ import useForm from "../hooks/useForm";
 export const LoginContext = createContext();
 
 export const LoginContextProvider = ({ children }) => {
-  const [activeUser, setActiveUser] = useState({});
+  const [activeUser, setActiveUser] = useState({ nickname: "" });
   const { handleSubmit } = useForm();
 
   async function userLogin(e, credentials) {
+    setActiveUser({ nickname: "loading" });
     await handleSubmit(e, "POST", "user", credentials, setActiveUser);
   }
 
@@ -16,7 +17,7 @@ export const LoginContextProvider = ({ children }) => {
 
     if (!confirm) null;
 
-    setActiveUser({});
+    setActiveUser({ nickname: "" });
 
     window.alert("Logout realizado!");
   }
