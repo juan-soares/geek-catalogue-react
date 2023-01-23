@@ -21,7 +21,7 @@ export default function ResourceFeatures({ resource }) {
           id="name"
           type="text"
           disabled={isInputDesabled}
-          value={inputValues.name}
+          value={inputValues?.name ? inputValues.name : ""}
           onChange={(e) => handleChange(e, inputValues, setInputValues)}
         />
       </>
@@ -35,7 +35,7 @@ export default function ResourceFeatures({ resource }) {
           id="name"
           type="text"
           disabled={isInputDesabled}
-          value={inputValues.name ? inputValues.name : ""}
+          value={inputValues?.name ? inputValues.name : ""}
           required
           onChange={(e) => handleChange(e, inputValues, setInputValues)}
         />
@@ -43,18 +43,21 @@ export default function ResourceFeatures({ resource }) {
     );
   }
 
-  function ResourceFeaturesAddForm({
-    selectedResource,
-    setShowAddForm,
-    setResourceList,
-  }) {
+  function ResourceFeaturesAddForm({ selectedResource, setShowAddForm }) {
     const [inputValues, setInputValues] = useState({});
 
     return (
       <form
         onSubmit={async (e) => {
-          await handleSubmit(e, "POST", url, inputValues, setInputValues);
-          await handleSubmit(null, "GET", url, {}, setResourceList);
+          await handleSubmit(
+            e,
+            "POST",
+            url,
+            inputValues,
+            null,
+            setResourceList
+          );
+          setInputValues({});
           setShowAddForm(false);
         }}
       >
@@ -82,18 +85,16 @@ export default function ResourceFeatures({ resource }) {
     resourceList,
     setResourceList,
   }) {
-    const [isInputDesabled, setIsInputDisabled] = useState(true);
-
-    function ListFormLi({ resourceItem, setResourceList }) {
+    function ListFormLi({ resourceItem }) {
+      const [isInputDesabled, setIsInputDisabled] = useState(true);
       const [inputValues, setInputValues] = useState(resourceItem);
+
       return (
         <li>
           <form
-            id="listForm"
-            onSubmit={(e) => {
-              e.preventDefault();
-              window.alert("Salvo!");
-
+            id={`form${resourceItem._id}`}
+            onSubmit={async (e) => {
+              await handleSubmit(e, "PUT", url, inputValues, setInputValues);
               setIsInputDisabled(true);
             }}
           >
@@ -112,7 +113,9 @@ export default function ResourceFeatures({ resource }) {
               />
             )}
           </form>
-          {!isInputDesabled && <button form="listForm">OK</button>}
+          {!isInputDesabled && (
+            <button form={`form${resourceItem._id}`}>OK</button>
+          )}
           {isInputDesabled && (
             <button onClick={() => setIsInputDisabled(false)}>ALT</button>
           )}

@@ -24,8 +24,6 @@ export default function HeaderGlobalSearch() {
         <button>0-</button>
       </form>
 
-      {console.log(searchedValues)}
-
       {/* <ul>
         {searchedValues.inputValue.length > 0 &&
           searchResults.length > 0 &&
