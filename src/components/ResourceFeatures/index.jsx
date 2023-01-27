@@ -1,171 +1,121 @@
 import { useEffect, useState } from "react";
 import useForm from "../../utils/hooks/useForm";
 
-export default function ResourceFeatures({ resource }) {
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [resourceList, setResourceList] = useState([]);
-  const { handleChange, handleSubmit } = useForm();
-  const url =
-    resource.url === "category" ? "category" : `category/${resource.url}`;
-
-  useEffect(() => {
-    setShowAddForm(false);
-    handleSubmit(null, "GET", url, {}, setResourceList);
-  }, [resource]);
-
-  function InputsCategory({ isInputDesabled, inputValues, setInputValues }) {
+export default function ResourceFeatures({ resourceSelected }) {
+  function InputsCategory({ resourceSelected, isDisabled }) {
     return (
       <>
         <label>Nome: </label>
-        <input
-          id="name"
-          type="text"
-          disabled={isInputDesabled}
-          value={inputValues?.name ? inputValues.name : ""}
-          onChange={(e) => handleChange(e, inputValues, setInputValues)}
-        />
+        <input type="text" value={resourceSelected.url} disabled={isDisabled} />
       </>
     );
   }
-  function InputsSubcategory({ isInputDesabled, inputValues, setInputValues }) {
+  function InputsCategorySubcategories({ resourceSelected, isDisabled }) {
     return (
       <>
         <label>Nome: </label>
-        <input
-          id="name"
-          type="text"
-          disabled={isInputDesabled}
-          value={inputValues?.name ? inputValues.name : ""}
-          required
-          onChange={(e) => handleChange(e, inputValues, setInputValues)}
-        />
+        <input type="text" value={resourceSelected.url} disabled={isDisabled} />
       </>
     );
   }
-
-  function ResourceFeaturesAddForm({ selectedResource, setShowAddForm }) {
-    const [inputValues, setInputValues] = useState({});
-
+  function ResourceFeaturesInputs({ resourceSelected, isDisabled }) {
     return (
-      <form
-        onSubmit={async (e) => {
-          await handleSubmit(
-            e,
-            "POST",
-            url,
-            inputValues,
-            null,
-            setResourceList
-          );
-          setInputValues({});
-          setShowAddForm(false);
-        }}
-      >
-        {selectedResource.url === "category" && (
+      <>
+        {resourceSelected.url === "category" && (
           <InputsCategory
-            isInputDesabled={false}
-            inputValues={inputValues}
-            setInputValues={setInputValues}
+            resourceSelected={resourceSelected}
+            isDisabled={isDisabled}
           />
         )}
-        {selectedResource.url === "subcategory" && (
-          <InputsSubcategory
-            isInputDesabled={false}
-            inputValues={inputValues}
-            setInputValues={setInputValues}
+        {resourceSelected.url !== "category" && (
+          <InputsCategorySubcategories
+            resourceSelected={resourceSelected}
+            isDisabled={isDisabled}
           />
         )}
-        <button>Salvar</button>
-      </form>
+      </>
     );
   }
 
-  function ResourceFeaturesListForm({
-    selectedResource,
-    resourceList,
-    setResourceList,
-  }) {
-    function ListFormLi({ resourceItem }) {
-      const [isInputDesabled, setIsInputDisabled] = useState(true);
-      const [inputValues, setInputValues] = useState(resourceItem);
-
-      return (
-        <li>
+  function ResourceFeaturesAdd({ resourceSelected }) {
+    const [showForm, setShowForm] = useState(false);
+    return (
+      <div>
+        <button onClick={() => setShowForm(!showForm)}>ADICIONAR</button>
+        {showForm && (
           <form
-            id={`form${resourceItem._id}`}
-            onSubmit={async (e) => {
-              await handleSubmit(e, "PUT", url, inputValues, setInputValues);
-              setIsInputDisabled(true);
+            onSubmit={(e) => {
+              e.preventDefault();
+              setShowForm(false);
             }}
           >
-            {selectedResource.url === "category" && (
-              <InputsCategory
-                isInputDesabled={isInputDesabled}
-                inputValues={inputValues}
-                setInputValues={setInputValues}
-              />
-            )}
-            {selectedResource.url === "subcategory" && (
-              <InputsSubcategory
-                isInputDesabled={isInputDesabled}
-                inputValues={inputValues}
-                setInputValues={setInputValues}
-              />
-            )}
+            <ResourceFeaturesInputs
+              resourceSelected={resourceSelected}
+              isDisabled={false}
+            />
+            <button>Salvar</button>
           </form>
-          {!isInputDesabled && (
-            <button form={`form${resourceItem._id}`}>OK</button>
-          )}
-          {isInputDesabled && (
-            <button onClick={() => setIsInputDisabled(false)}>ALT</button>
-          )}
-          <button
-            onClick={async () => {
-              await handleSubmit(
-                null,
-                "DELETE",
-                url,
-                { _id: resourceItem._id },
-                setResourceList
-              );
-            }}
-          >
-            DEL
-          </button>
-        </li>
-      );
-    }
+        )}
+      </div>
+    );
+  }
+  function ResourceFeaturesList({ resourceSelected }) {
+    const [isDisabled, setIsDisabled] = useState(true);
+
     return (
       <ul>
-        {resourceList.map((resourceItem) => (
-          <ListFormLi
-            key={resourceItem._id}
-            resourceItem={resourceItem}
-            setResourceList={setResourceList}
-          />
-        ))}
+        <li>
+          <form>
+            <ResourceFeaturesInputs
+              resourceSelected={resourceSelected}
+              isDisabled={isDisabled}
+            />
+          </form>
+          {isDisabled && (
+            <button
+              onClick={() => {
+                setIsDisabled(false);
+              }}
+            >
+              ALT
+            </button>
+          )}
+          {!isDisabled && (
+            <button
+              onClick={() => {
+                setIsDisabled(true);
+              }}
+            >
+              OK
+            </button>
+          )}
+          <button>DEL</button>
+        </li>
       </ul>
     );
   }
 
+  const [resourceList, setResourceList] = useState([]);
+  const { handleSubmit } = useForm();
+
+  useEffect(() => {
+    async function get() {
+      await handleSubmit(
+        null,
+        "GET",
+        resourceSelected.url,
+        {},
+        setResourceList
+      );
+    }
+    get();
+  }, [resourceSelected]);
+
   return (
     <section>
-      <h1>{resource.title}</h1>
-      {resource.url !== "category" && (
-        <button onClick={() => setShowAddForm(!showAddForm)}>Adicionar</button>
-      )}
-      {showAddForm && (
-        <ResourceFeaturesAddForm
-          selectedResource={resource}
-          setShowAddForm={setShowAddForm}
-          setResourceList={setResourceList}
-        />
-      )}
-      <ResourceFeaturesListForm
-        selectedResource={resource}
-        resourceList={resourceList}
-        setResourceList={setResourceList}
-      />
+      <h1>{resourceSelected.title}</h1>
+      <ResourceFeaturesAdd resourceSelected={resourceSelected} />
+      <ResourceFeaturesList resourceSelected={resourceSelected} />
     </section>
   );
 }

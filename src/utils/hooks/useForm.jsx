@@ -5,7 +5,6 @@ export default function useForm() {
 
   function handleChange(e, inputValues, setInputValues) {
     setInputValues({ ...inputValues, [e.target.id]: e.target.value });
-    
   }
 
   async function handleSubmit(
