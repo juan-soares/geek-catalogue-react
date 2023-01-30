@@ -14,7 +14,7 @@ export default function AdminPage() {
     { title: "Edições", url: "category/edition" },
     { title: "Gêneros", url: "category/genre" },
     { title: "Modalidades", url: "category/modality" },
-    { title: "Movimentações", url: "category/movement" },
+    { title: "Movimentações", url: "category/movimentation" },
     { title: "Temáticas", url: "theme" },
     { title: "Franquias", url: "franchise" },
   ];

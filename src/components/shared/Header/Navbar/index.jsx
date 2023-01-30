@@ -9,14 +9,14 @@ export default function HeaderNavbar() {
   const [submenu, setShowSubmenu] = useState(false);
 
   useEffect(() => {
-    handleSubmit(null, "GET", "category", list, setList);
+    handleSubmit(null, "GET", "category", null, null, setList);
   }, []);
 
   return (
     <nav>
       <ul>
-        {list.length === 0 && "Carregando..."}
-        {list.length > 0 &&
+        {list[0] === "loading" && "Carregando..."}
+        {list[0] !== "loading" &&
           list.map((category) => {
             if (category.subcategories.length === 0) {
               return (
