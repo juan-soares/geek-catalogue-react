@@ -18,8 +18,9 @@ export default function useForm() {
     switch (method) {
       case "GET":
         {
+          setList(["loading"]);
           const data = await getService(url);
-          setInputValues(data);
+          setList(data);
         }
         break;
 
@@ -28,6 +29,7 @@ export default function useForm() {
           e.preventDefault();
           const confirm = window.confirm("Deseja salvar?");
           if (!confirm) return;
+          if (setList) setList(["loading"]);
           const { message, data } = await postService(url, inputValues);
           setList ? setList(data) : setInputValues(data);
           window.alert(message);
@@ -50,7 +52,7 @@ export default function useForm() {
           const { message, data } = await deleteService(url, inputValues);
           window.alert(message);
 
-          setInputValues(data);
+          setList(data);
         }
         break;
 
