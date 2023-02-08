@@ -1,5 +1,6 @@
 import InputsCategory from "./Category";
-import InputsCategorySubcategories from "./Category/Subcategory";
+import InputsCategorySubcategories from "./Subcategory";
+import InputsTheme from "./Theme";
 
 export default function ResourceFeaturesInputs({
   resourceSelected,
@@ -17,8 +18,17 @@ export default function ResourceFeaturesInputs({
           setResourceInputValues={setResourceInputValues}
         />
       )}
-      {resourceSelected.url !== "category" && (
-        <InputsCategorySubcategories
+      {resourceSelected.url !== "category" &&
+        resourceSelected.url !== "theme" && (
+          <InputsCategorySubcategories
+            isDisabled={isDisabled}
+            resourceItem={resourceInputValues}
+            resourceInputValues={resourceInputValues}
+            setResourceInputValues={setResourceInputValues}
+          />
+        )}
+      {resourceSelected.url === "theme" && (
+        <InputsTheme
           isDisabled={isDisabled}
           resourceItem={resourceInputValues}
           resourceInputValues={resourceInputValues}

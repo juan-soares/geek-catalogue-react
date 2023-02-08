@@ -48,20 +48,22 @@ export default function ListLi({
           OK
         </button>
       )}
-      <button
-        onClick={async () => {
-          await handleSubmit(
-            null,
-            "DELETE",
-            resourceSelected.url,
-            { _id: resourceItem._id },
-            null,
-            setResourceList
-          );
-        }}
-      >
-        DEL
-      </button>
+      {resourceSelected.url !== "category" && (
+        <button
+          onClick={async () => {
+            await handleSubmit(
+              null,
+              "DELETE",
+              resourceSelected.url,
+              { _id: resourceItem._id },
+              null,
+              setResourceList
+            );
+          }}
+        >
+          DEL
+        </button>
+      )}
     </li>
   );
 }
