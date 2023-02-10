@@ -28,6 +28,7 @@ export default function CategoryResourceDatalist({
   useEffect(() => {
     handleSubmit(null, "GET", categoryResource.url, null, null, setOptionList);
   }, []);
+  
   return (
     <ul>
       <li>
