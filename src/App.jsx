@@ -1,13 +1,14 @@
+import ContextUserProvider from "./utils/context/user";
+
 import { RouterProvider } from "react-router-dom";
-import { LoginContextProvider } from "./utils/context/login";
 import routes from "./routes";
 
 export default function App() {
   return (
     <>
-      <LoginContextProvider>
+      <ContextUserProvider>
         <RouterProvider router={routes} />
-      </LoginContextProvider>
+      </ContextUserProvider>
     </>
   );
 }

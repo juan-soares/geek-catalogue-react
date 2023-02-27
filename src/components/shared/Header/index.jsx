@@ -1,22 +1,17 @@
 import { Link } from "react-router-dom";
-import HeaderGlobalSearch from "./GlobalSearch";
-import HeaderLoginBar from "./LoginBar";
-import HeaderNavbar from "./Navbar";
+import GlobalSearchBar from "./GlobalSearchBar";
+import LoginBar from "./LoginBar";
+import NavBar from "./NavBar";
 
 export default function Header() {
   return (
     <header>
       <Link to="/">
-        <img
-          src="https://png.pngtree.com/element_our/png_detail/20181008/s-logo-template-isolated-on-black-background-png_130991.jpg"
-          alt=""
-          width="50"
-          height="50"
-        />
+        <img src="?" alt="logo" />
       </Link>
-      <HeaderGlobalSearch />
-      <HeaderLoginBar />
-      <HeaderNavbar />
+      <GlobalSearchBar />
+      <LoginBar />
+      <NavBar />
     </header>
   );
 }
