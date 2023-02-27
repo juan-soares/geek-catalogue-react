@@ -1,42 +1,46 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useForm from "../../utils/hooks/useForm";
-import { LoginContext } from "../../utils/context/login";
+import { ContextUser } from "../../utils/context/user";
 
 export default function LoginPage() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const { handleChange } = useForm();
-  const { activeUser, userLogin } = useContext(LoginContext);
-  const redirect = useNavigate();
+  const { login } = useContext(ContextUser);
+  const navigate = useNavigate();
 
   return (
     <div>
-      Login Page
       <form
         onSubmit={async (e) => {
-          await userLogin(e, credentials);
+          e.preventDefault();
+          let confirm = window.confirm("Deseja prosseguir?");
+          if (!confirm) return;
+          window.alert(await login(credentials));
           setCredentials({ email: "", password: "" });
-          redirect("/");
+          navigate("/");
         }}
       >
-        <label htmlFor="email">Usuário: </label>
+        <label htmlFor="email">Usuário:</label>
         <input
           type="email"
           id="email"
-          placeholder="E-mail"
-          value={credentials.email}
-          onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
+          value={credentials.email}
+          onChange={(e) =>
+            setCredentials({ ...credentials, email: e.target.value })
+          }
         />
         <label htmlFor="password">Senha: </label>
         <input
-          type="password"
+          type="text"
           id="password"
-          value={credentials.password}
-          onChange={(e) => handleChange(e, credentials, setCredentials)}
           required
+          value={credentials.password}
+          onChange={(e) =>
+            setCredentials({ ...credentials, password: e.target.value })
+          }
         />
-        <button>{activeUser.nickname === "loading" ? "Loading" : "OK"}</button>
+
+        <button>Ir</button>
       </form>
     </div>
   );
