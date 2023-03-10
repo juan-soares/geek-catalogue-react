@@ -1,7 +1,10 @@
-import ContextUserProvider from "./utils/context/user";
+//Deve centralizar e renderizar a aplicação.
+//Deve conter os Context-Providers, para serem consumidos pelos componentes filhos.
+//Deve conter o gerenciador de rotas.
 
 import { RouterProvider } from "react-router-dom";
-import routes from "./routes";
+import ContextUserProvider from "./utils/context/user";
+import { routes } from "./routes";
 
 export default function App() {
   return (

@@ -1,3 +1,5 @@
+//Deve ser a primeira página a ser exibida.
+
 export default function HomePage() {
-  return <div>home</div>;
+  return <div>Home</div>;
 }

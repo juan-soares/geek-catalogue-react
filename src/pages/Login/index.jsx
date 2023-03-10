@@ -1,47 +1,52 @@
+//ok-Deve conter um formulário, com campos para o preenchimento obrigatório de email e sennha.
+//ok-Deve emitir uma mensagem de alerta de confirmação ou erro de acordo com a resposta do servidor, ao ser submetido.
+//ok-Deve bloquear o botao de login, enquanto espera uma respota.
+//ok-Deve limpar os campos, ao ser submetido.
+//ok-Deve direcionar para a home page, se o login for efetuado com sucesso.
+//ok-Nao deve ser acessada se o usuário estiver logado.
+
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ContextUser } from "../../utils/context/user";
+import useForm from "../../utils/hooks/useForm";
 
 export default function LoginPage() {
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
-  const { login } = useContext(ContextUser);
-  const navigate = useNavigate();
+  const [credentials, setCredentials] = useState({});
+  const { user, loginUser } = useContext(ContextUser);
+  const { handleChange } = useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
-  return (
-    <div>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          let confirm = window.confirm("Deseja prosseguir?");
-          if (!confirm) return;
-          window.alert(await login(credentials));
-          setCredentials({ email: "", password: "" });
-          navigate("/");
-        }}
-      >
-        <label htmlFor="email">Usuário:</label>
-        <input
-          type="email"
-          id="email"
-          required
-          value={credentials.email}
-          onChange={(e) =>
-            setCredentials({ ...credentials, email: e.target.value })
-          }
-        />
-        <label htmlFor="password">Senha: </label>
-        <input
-          type="text"
-          id="password"
-          required
-          value={credentials.password}
-          onChange={(e) =>
-            setCredentials({ ...credentials, password: e.target.value })
-          }
-        />
-
-        <button>Ir</button>
-      </form>
-    </div>
-  );
+  if (!user) {
+    return (
+      <div>
+        <form
+          onSubmit={async (e) => {
+            await loginUser(e, credentials, setIsLoading, setCredentials);
+          }}
+        >
+          <label>Email: </label>
+          <input
+            type="email"
+            id="email"
+            value={credentials.email ? credentials.email : ""}
+            onChange={(e) => handleChange(e, credentials, setCredentials)}
+            required
+          />
+          <label>Senha: </label>
+          <input
+            type="password"
+            id="password"
+            value={credentials.password ? credentials.password : ""}
+            onChange={(e) => handleChange(e, credentials, setCredentials)}
+            required
+          />
+          <button disabled={isLoading}>
+            {isLoading ? "Loading.." : "Login"}
+          </button>
+        </form>
+      </div>
+    );
+  } else {
+    return <Navigate replace to="/" />;
+  }
 }

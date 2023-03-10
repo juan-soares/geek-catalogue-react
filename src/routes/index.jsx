@@ -1,20 +1,22 @@
-import { useEffect } from "react";
+//Deve gerenciar as rotas e as páginas a serem acessadas por elas.
+
 import { createBrowserRouter } from "react-router-dom";
-import CategoryPage from "../pages/Category";
-import DefaultLayoutPage from "../pages/DefaultLayout";
+import DefaultPage from "../pages/Default";
+
 import HomePage from "../pages/Home";
 import LoginPage from "../pages/Login";
 
-const routes = createBrowserRouter([
+export const routes = createBrowserRouter([
   {
     path: "/",
-    element: <DefaultLayoutPage />,
+    element: <DefaultPage />,
     children: [
-      { path: "/", element: <HomePage /> },
-      { path: "/login", element: <LoginPage /> },
-      { path: "/:categoryUrl", element: <CategoryPage /> },
+      {
+        path: "/",
+        element: <HomePage />,
+        path: "/login",
+        element: <LoginPage />,
+      },
     ],
   },
 ]);
-
-export default routes;

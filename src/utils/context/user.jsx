@@ -1,39 +1,44 @@
+//ok-Deve fazer o login: validar os dados enviados do formulário com o servidor e preservar as informações do usuário, caso seja identificado.
+//ok-Deve fazer o logout: limpar os dados do usuário da seção.
+
 import { createContext, useState } from "react";
+import useForm from "../hooks/useForm";
+
 export const ContextUser = createContext();
 
 export default function ContextUserProvider({ children }) {
-  const [user, setUser] = useState(
-    sessionStorage.getItem("nickname")
-      ? JSON.parse(sessionStorage.getItem("nickname"))
-      : { nickname: "" }
-  );
+  const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("user")));
+  const { handleSubmit } = useForm();
 
-  async function login(credentials) {
-    const res = await fetch(`${process.env.REACT_APP_API}/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
+  async function loginUser(e, credentials, setIsLoading, setCredentials) {
+    setIsLoading(true);
 
-    const { data, message } = await res.json();
-    if (data.nickname !== "") {
-      sessionStorage.setItem("nickname", JSON.stringify(data.nickname));
-      setUser(JSON.parse(sessionStorage.getItem("nickname")));
+    function setUserSessionStorage(data) {
+      sessionStorage.setItem("user", JSON.stringify(data));
     }
-    return message;
+
+    await handleSubmit(
+      e,
+      "POST",
+      "/user",
+      credentials,
+      setCredentials,
+      setUserSessionStorage
+    );
+    setUser(JSON.parse(sessionStorage.getItem("user")));
+    setIsLoading(false);
   }
 
-  function logout() {
-    let confirm = window.confirm("Deseja sair?");
+  function logoutUser() {
+    const confirm = window.confirm("Deseja sair?");
     if (!confirm) return;
     sessionStorage.clear();
-    setUser({ nickname: "" });
+    setUser(null);
   }
 
   return (
-    <ContextUser.Provider value={{ user, login, logout }}>
+    <ContextUser.Provider value={{ user, setUser, loginUser, logoutUser }}>
+      {console.log(user)}
       {children}
     </ContextUser.Provider>
   );
